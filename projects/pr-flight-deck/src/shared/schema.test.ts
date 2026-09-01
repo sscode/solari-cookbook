@@ -8,11 +8,19 @@ describe("FlightDeckProjectConfigSchema", () => {
     projectPath: "apps/storefront",
     startCommand: "npm start",
     port: 4173,
-    journeys: [{ id: "smoke", name: "Smoke", steps: [{ action: "goto", path: "/" }] }],
+    journeys: [
+      {
+        id: "smoke",
+        name: "Smoke",
+        steps: [{ action: "goto", path: "/", checkLabel: "Open the storefront" }],
+      },
+    ],
   }
 
   it("normalizes a valid project configuration", () => {
-    expect(FlightDeckProjectConfigSchema.parse(valid).healthPath).toBe("/")
+    const config = FlightDeckProjectConfigSchema.parse(valid)
+    expect(config.healthPath).toBe("/")
+    expect(config.journeys[0]?.steps[0]?.checkLabel).toBe("Open the storefront")
   })
 
   it.each(["../private", "apps/../../private", "/etc"])("rejects unsafe project path %s", (projectPath) => {

@@ -81,7 +81,11 @@ inside `projectPath`; paths cannot be absolute or traverse above the checkout.
       "steps": [
         { "action": "goto", "path": "/" },
         { "action": "click", "role": "button", "name": "Buy now" },
-        { "action": "expectText", "text": "Order confirmed" }
+        {
+          "action": "expectText",
+          "text": "Order confirmed",
+          "checkLabel": "Checkout confirms the order"
+        }
       ]
     }
   ]
@@ -89,7 +93,8 @@ inside `projectPath`; paths cannot be absolute or traverse above the checkout.
 ```
 
 Supported journey actions are `goto`, `click`, `fill`, `press`, `expectText`,
-`expectVisible`, and `expectUrlContains`. Flight Deck also checks HTTP status,
+`expectVisible`, and `expectUrlContains`. Add an optional `checkLabel` to give any
+step a release-focused name. Flight Deck also checks HTTP status,
 document title, browser exceptions, mobile overflow, accessible control names,
 form labels, image alternatives, unique IDs, and the main landmark.
 

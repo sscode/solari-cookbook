@@ -11,10 +11,12 @@ const safeRelativePath = z
   )
 
 const shellCommand = z.string().trim().min(1).max(1_000)
+const optionalStepLabel = z.string().trim().min(1).max(120).optional()
 
 const gotoStep = z.object({
   action: z.literal("goto"),
   path: z.string().startsWith("/").max(240),
+  checkLabel: optionalStepLabel,
 })
 
 const clickStep = z.object({
@@ -22,33 +24,39 @@ const clickStep = z.object({
   role: z.enum(["button", "link"]),
   name: z.string().min(1).max(160),
   exact: z.boolean().optional(),
+  checkLabel: optionalStepLabel,
 })
 
 const fillStep = z.object({
   action: z.literal("fill"),
   label: z.string().min(1).max(160),
   value: z.string().max(1_000),
+  checkLabel: optionalStepLabel,
 })
 
 const pressStep = z.object({
   action: z.literal("press"),
   key: z.string().min(1).max(40),
+  checkLabel: optionalStepLabel,
 })
 
 const expectTextStep = z.object({
   action: z.literal("expectText"),
   text: z.string().min(1).max(240),
   exact: z.boolean().optional(),
+  checkLabel: optionalStepLabel,
 })
 
 const expectVisibleStep = z.object({
   action: z.literal("expectVisible"),
   selector: z.string().min(1).max(240),
+  checkLabel: optionalStepLabel,
 })
 
 const expectUrlStep = z.object({
   action: z.literal("expectUrlContains"),
   value: z.string().min(1).max(240),
+  checkLabel: optionalStepLabel,
 })
 
 export const JourneyStepSchema = z.discriminatedUnion("action", [

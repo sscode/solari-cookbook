@@ -428,7 +428,7 @@ export class SolariFlightEngine {
               category: "journey",
               label: stepLabel(step),
               status: "failed",
-              detail: describeError(error),
+              detail: stepFailureDetail(step, error),
               durationMs: Date.now() - stepStarted,
             })
           }
@@ -748,6 +748,7 @@ function accessibilityChecks(id: string, result: AccessibilityResult): AuditChec
 }
 
 function stepLabel(step: JourneyStep): string {
+  if (step.checkLabel) return step.checkLabel
   switch (step.action) {
     case "goto":
       return `Open ${step.path}`
@@ -763,6 +764,25 @@ function stepLabel(step: JourneyStep): string {
       return `Show ${step.selector}`
     case "expectUrlContains":
       return `URL contains “${step.value}”`
+  }
+}
+
+function stepFailureDetail(step: JourneyStep, error: unknown): string {
+  switch (step.action) {
+    case "goto":
+      return `Could not open ${step.path}: ${firstErrorLine(error)}`
+    case "click":
+      return `Could not click the ${step.role} “${step.name}” within 8 seconds`
+    case "fill":
+      return `Could not fill “${step.label}” within 8 seconds`
+    case "press":
+      return `Could not press ${step.key}: ${firstErrorLine(error)}`
+    case "expectText":
+      return `Expected visible text “${step.text}” within 5 seconds`
+    case "expectVisible":
+      return `Expected ${step.selector} to be visible within 5 seconds`
+    case "expectUrlContains":
+      return `Expected the URL to include “${step.value}” within 8 seconds`
   }
 }
 
@@ -783,6 +803,10 @@ function suiteDetail(suite: BrowserSuiteReport): string {
 function describeError(error: unknown): string {
   if (error instanceof Error) return error.message.slice(0, 1_000)
   return String(error).slice(0, 1_000)
+}
+
+function firstErrorLine(error: unknown): string {
+  return describeError(error).split("\n", 1)[0] ?? "Unknown browser error"
 }
 
 function ensureTrailingSlash(value: string): string {

@@ -99,7 +99,7 @@ export interface RunReport {
   error?: string
 }
 
-export type JourneyStep =
+export type JourneyStep = (
   | { action: "goto"; path: string }
   | { action: "click"; role: "button" | "link"; name: string; exact?: boolean }
   | { action: "fill"; label: string; value: string }
@@ -107,6 +107,7 @@ export type JourneyStep =
   | { action: "expectText"; text: string; exact?: boolean }
   | { action: "expectVisible"; selector: string }
   | { action: "expectUrlContains"; value: string }
+) & { checkLabel?: string }
 
 export interface JourneyDefinition {
   id: string
