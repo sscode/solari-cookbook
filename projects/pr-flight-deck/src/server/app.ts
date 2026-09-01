@@ -15,6 +15,7 @@ interface CreateAppOptions {
   environment: AppEnvironment
   store: RunStore
   coordinator: RunCoordinator
+  logStream?: { write(message: string): void }
 }
 
 export function createApp(options: CreateAppOptions): Express {
@@ -38,14 +39,17 @@ export function createApp(options: CreateAppOptions): Express {
     }),
   )
   app.use(
-    pinoHttp({
-      enabled: environment.nodeEnv !== "test",
-      quietReqLogger: environment.nodeEnv === "test",
-      redact: {
-        paths: ["req.headers.authorization", "req.headers.cookie", "res.headers.set-cookie"],
-        censor: "[redacted]",
+    pinoHttp(
+      {
+        enabled: environment.nodeEnv !== "test" || Boolean(options.logStream),
+        quietReqLogger: environment.nodeEnv === "test",
+        redact: {
+          paths: ["req.headers.authorization", "req.headers.cookie", "res.headers.set-cookie"],
+          censor: "[redacted]",
+        },
       },
-    }),
+      options.logStream,
+    ),
   )
   app.use(express.json({ limit: "16kb", strict: true }))
 
@@ -133,11 +137,13 @@ export function createApp(options: CreateAppOptions): Express {
   return app
 }
 
-export function attachProductionClient(app: Express): void {
-  const clientDirectory = path.resolve(process.cwd(), "dist-client")
+export function attachProductionClient(
+  app: Express,
+  clientDirectory = path.resolve(process.cwd(), "dist-client"),
+): void {
   app.use(express.static(clientDirectory, { maxAge: "1h", index: false }))
   app.use((request, response, next) => {
-    if (request.method !== "GET" || !request.accepts("html")) {
+    if (request.method !== "GET" || path.extname(request.path) || !request.accepts("html")) {
       next()
       return
     }

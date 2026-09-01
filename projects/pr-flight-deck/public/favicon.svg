@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PR Flight Deck">
+  <rect width="64" height="64" rx="10" fill="#101311"/>
+  <rect x="7" y="7" width="50" height="50" fill="none" stroke="#424943" stroke-width="2"/>
+  <rect x="16" y="36" width="7" height="12" fill="#dcff67" opacity=".55"/>
+  <rect x="28" y="26" width="7" height="22" fill="#dcff67" opacity=".78"/>
+  <rect x="40" y="15" width="7" height="33" fill="#dcff67"/>
+</svg>
