@@ -234,29 +234,55 @@ export class SolariFlightEngine {
       }
     } finally {
       currentStage = "cleanup"
-      await this.activateStage(runId, currentStage, "Releasing every remote resource")
+      try {
+        await this.activateStage(runId, currentStage, "Releasing every remote resource")
+      } catch {
+        // Evidence persistence must never stand between us and resource release.
+      }
 
       if (serverProcess) {
         try {
-          await serverProcess.kill()
-        } catch {
+          await withTimeout(serverProcess.kill(), 15_000, "Preview process release")
+        } catch (error) {
           cleanupComplete = false
+          await this.appendLogBestEffort(
+            runId,
+            "cleanup",
+            "stderr",
+            `Preview process release warning: ${describeError(error)}`,
+          )
         }
       }
 
       try {
-        await browsers.close()
-      } catch {
+        await withTimeout(browsers.close(), 15_000, "Browser client release")
+      } catch (error) {
         cleanupComplete = false
+        await this.appendLogBestEffort(
+          runId,
+          "cleanup",
+          "stderr",
+          `Browser client release warning: ${describeError(error)}`,
+        )
       }
 
       if (sandbox) {
         try {
-          await sandbox.kill()
+          await withTimeout(sandbox.kill(), 30_000, "Sandbox release")
         } catch (error) {
           cleanupComplete = false
-          await this.appendLog(runId, "cleanup", "stderr", `Sandbox release warning: ${describeError(error)}`)
+          await this.appendLogBestEffort(
+            runId,
+            "cleanup",
+            "stderr",
+            `Sandbox release warning: ${describeError(error)}`,
+          )
         }
+      }
+
+      if (!cleanupComplete) {
+        finalStatus = "error"
+        finalVerdict = "ERROR — remote cleanup needs attention"
       }
 
       const finishedAt = new Date()
@@ -586,6 +612,19 @@ export class SolariFlightEngine {
     await this.mutate(runId, (report) => addLog(report, stage, stream, message))
   }
 
+  private async appendLogBestEffort(
+    runId: string,
+    stage: StageId,
+    stream: "system" | "stdout" | "stderr",
+    message: string,
+  ): Promise<void> {
+    try {
+      await this.appendLog(runId, stage, stream, message)
+    } catch {
+      // Cleanup continues even if evidence storage is unavailable.
+    }
+  }
+
   private async mutate(runId: string, mutation: (report: RunReport) => void): Promise<void> {
     await this.store.update(runId, mutation)
   }
@@ -767,4 +806,18 @@ function countLines(bytes: Uint8Array): number {
 
 function sleep(milliseconds: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, milliseconds))
+}
+
+async function withTimeout<T>(promise: Promise<T>, milliseconds: number, label: string): Promise<T> {
+  let timeout: NodeJS.Timeout | undefined
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<never>((_resolve, reject) => {
+        timeout = setTimeout(() => reject(new Error(`${label} timed out after ${milliseconds} ms`)), milliseconds)
+      }),
+    ])
+  } finally {
+    if (timeout) clearTimeout(timeout)
+  }
 }
