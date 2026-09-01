@@ -1,5 +1,8 @@
 # PR Flight Deck
 
+**[Open the live app](https://pr-flight-deck-production.up.railway.app)** ·
+**[Inspect the deterministic demo PR](https://github.com/sscode/solari-cookbook/pull/1)**
+
 PR Flight Deck turns a pull request into recorded release evidence. It checks out
 untrusted code inside a disposable [Solari](https://getsolari.com) sandbox,
 starts a public preview, drives the critical journey in recorded desktop and

@@ -9,7 +9,7 @@ export const showcaseReport: RunReport = {
   target: {
     repository: "https://github.com/sscode/solari-cookbook",
     pullNumber: 1,
-    commit: "7d8c2b41f9a0",
+    commit: "648a051",
     projectPath: "projects/pr-flight-deck/fixtures/demo-shop",
   },
   createdAt: "2026-09-01T00:14:18.000Z",
@@ -30,7 +30,7 @@ export const showcaseReport: RunReport = {
       id: "checkout",
       label: "Checkout",
       status: "passed",
-      detail: "Fetched pull/1/head at 7d8c2b41f9a0",
+      detail: "Fetched pull/1/head at 648a051",
       durationMs: 4_902,
     },
     {
@@ -209,7 +209,7 @@ export const showcaseReport: RunReport = {
       at: "2026-09-01T00:14:25.086Z",
       stage: "checkout",
       stream: "stdout",
-      message: "Checked out pull/1/head at 7d8c2b41f9a0",
+      message: "Checked out pull/1/head at 648a051",
     },
     {
       at: "2026-09-01T00:14:31.136Z",
