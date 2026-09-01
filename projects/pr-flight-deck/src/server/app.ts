@@ -37,7 +37,16 @@ export function createApp(options: CreateAppOptions): Express {
       crossOriginResourcePolicy: { policy: "same-origin" },
     }),
   )
-  app.use(pinoHttp({ quietReqLogger: environment.nodeEnv === "test" }))
+  app.use(
+    pinoHttp({
+      enabled: environment.nodeEnv !== "test",
+      quietReqLogger: environment.nodeEnv === "test",
+      redact: {
+        paths: ["req.headers.authorization", "req.headers.cookie", "res.headers.set-cookie"],
+        censor: "[redacted]",
+      },
+    }),
+  )
   app.use(express.json({ limit: "16kb", strict: true }))
 
   app.get("/api/health", (_request, response) => {
