@@ -392,7 +392,6 @@ export class SolariFlightEngine {
     let page: Page | undefined
     let screenshotUrl: string | undefined
     let replayUrl: string | undefined
-    let replayExpiresInSeconds: number | undefined
     let replayEventCount: number | undefined
     let sessionId: string | undefined
 
@@ -526,14 +525,9 @@ export class SolariFlightEngine {
       for (let attempt = 1; attempt <= REPLAY_ATTEMPTS; attempt += 1) {
         await sleep(1_500)
         try {
-          const [replay, bytes] = await Promise.all([
-            client.sessions.getReplayUrl(sessionId),
-            client.sessions.downloadReplay(sessionId),
-          ])
-          replayUrl = replay.url
-          replayExpiresInSeconds = replay.expiresInSeconds
+          const bytes = await client.sessions.downloadReplay(sessionId)
           replayEventCount = countLines(bytes)
-          await this.store.writeArtifact(runId, `${id}.ndjson`, bytes)
+          replayUrl = await this.store.writeArtifact(runId, `${id}.ndjson`, bytes)
           break
         } catch (error) {
           if (attempt === REPLAY_ATTEMPTS) {
@@ -558,7 +552,6 @@ export class SolariFlightEngine {
       consoleErrors,
       screenshotUrl,
       replayUrl,
-      replayExpiresInSeconds,
       replayEventCount,
     }
   }

@@ -6,8 +6,8 @@
 PR Flight Deck turns a pull request into recorded release evidence. It checks out
 untrusted code inside a disposable [Solari](https://getsolari.com) sandbox,
 starts a public preview, drives the critical journey in recorded desktop and
-mobile browsers, and returns a compact release verdict with screenshots, replay
-links, logs, and a retained failure snapshot.
+mobile browsers, and returns a compact release verdict with screenshots, an
+in-app session player, logs, and a retained failure snapshot.
 
 The hosted app is safe by default: visitors can replay one configured public
 fixture PR, but cannot submit arbitrary repositories or spend unbounded Solari
@@ -24,8 +24,8 @@ public PR
    ▼
 Solari sandbox ── checkout / build / preview ── failure snapshot
    │
-   ├── recorded browser · 1440 × 900 ── screenshot + replay
-   └── recorded browser ·  390 × 844 ── screenshot + replay
+   ├── recorded browser · 1440 × 900 ── screenshot + rrweb player
+   └── recorded browser ·  390 × 844 ── screenshot + rrweb player
    │
    ▼
 release verdict + structured evidence

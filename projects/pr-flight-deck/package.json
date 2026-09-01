@@ -25,6 +25,7 @@
     "pino-http": "^10.5.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "rrweb-player": "^2.1.1",
     "zod": "^4.1.5"
   },
   "devDependencies": {

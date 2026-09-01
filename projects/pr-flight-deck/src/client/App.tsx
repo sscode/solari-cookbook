@@ -7,6 +7,7 @@ import type {
   PublicAppConfig,
   RunReport,
 } from "../shared/model"
+import { ReplayViewer } from "./ReplayViewer"
 
 type LoadState = "loading" | "ready" | "error"
 
@@ -18,6 +19,10 @@ export function App() {
   const [activeSuiteId, setActiveSuiteId] = useState<BrowserSuiteReport["id"]>("desktop")
   const [launching, setLaunching] = useState(false)
   const [notice, setNotice] = useState<string>()
+  const [replaySelection, setReplaySelection] = useState<{
+    runId: string
+    suite: BrowserSuiteReport
+  }>()
 
   const load = useCallback(async () => {
     try {
@@ -104,12 +109,22 @@ export function App() {
               activeSuite={activeSuite}
               activeSuiteId={activeSuiteId}
               onSuiteChange={setActiveSuiteId}
+              onReplay={() => {
+                if (activeSuite) setReplaySelection({ runId: selected.id, suite: activeSuite })
+              }}
             />
             <ChecksPanel suite={activeSuite} report={selected} />
           </section>
           <RunLog report={selected} />
         </main>
       </div>
+      {replaySelection ? (
+        <ReplayViewer
+          runId={replaySelection.runId}
+          suite={replaySelection.suite}
+          onClose={() => setReplaySelection(undefined)}
+        />
+      ) : null}
     </div>
   )
 }
@@ -305,11 +320,13 @@ function EvidencePanel({
   activeSuite,
   activeSuiteId,
   onSuiteChange,
+  onReplay,
 }: {
   report: RunReport
   activeSuite?: BrowserSuiteReport
   activeSuiteId: BrowserSuiteReport["id"]
   onSuiteChange: (id: BrowserSuiteReport["id"]) => void
+  onReplay: () => void
 }) {
   return (
     <article className="panel evidence-panel">
@@ -362,9 +379,9 @@ function EvidencePanel({
           </p>
         </div>
         {activeSuite?.replayUrl ? (
-          <a href={activeSuite.replayUrl} target="_blank" rel="noreferrer" className="replay-link">
-            Open session replay <PlayIcon />
-          </a>
+          <button type="button" className="replay-link" onClick={onReplay}>
+            Play session replay <PlayIcon />
+          </button>
         ) : (
           <span className="replay-link is-muted">
             {report.source === "showcase" ? "Replay summary retained" : "Replay appears after browser release"}

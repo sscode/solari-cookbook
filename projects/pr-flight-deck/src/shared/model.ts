@@ -54,7 +54,6 @@ export interface BrowserSuiteReport {
   consoleErrors: string[]
   screenshotUrl?: string
   replayUrl?: string
-  replayExpiresInSeconds?: number
   replayEventCount?: number
 }
 
