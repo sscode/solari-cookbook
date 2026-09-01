@@ -17,7 +17,12 @@
           "name": "Add navigation light",
           "exact": true
         },
-        { "action": "expectText", "text": "1 item secured", "exact": true }
+        {
+          "action": "expectText",
+          "text": "1 item secured",
+          "exact": true,
+          "checkLabel": "Cart confirms selection"
+        }
       ]
     }
   ]

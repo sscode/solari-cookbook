@@ -19,6 +19,8 @@ verdict with screenshots, replay links, logs, and a retained failure snapshot.
 It is deliberately larger than the single-concept examples below: a complete,
 deployable use case showing how Solari browsers and sandboxes compose.
 
+[Open the live Flight Deck →](https://pr-flight-deck-production.up.railway.app)
+
 ## Examples
 
 ### Cloud browser
