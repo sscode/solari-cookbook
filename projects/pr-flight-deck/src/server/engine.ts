@@ -155,7 +155,7 @@ export class SolariFlightEngine {
       })
 
       const preview = await sandbox.previewUrl(config.port)
-      await this.waitForPreview(runId, preview.url, config.healthPath, preview.token)
+      await this.waitForPreview(runId, sandbox, config.port, config.healthPath)
       await this.mutate(runId, (report) => {
         report.previewUrl = preview.url
         updateStage(report, "preview", "passed", `Preview healthy on port ${config.port}`)
@@ -599,20 +599,21 @@ export class SolariFlightEngine {
 
   private async waitForPreview(
     runId: string,
-    previewUrl: string,
+    sandbox: Sandbox,
+    port: number,
     healthPath: string,
-    previewToken?: string,
   ): Promise<void> {
-    const healthUrl = new URL(healthPath, ensureTrailingSlash(previewUrl)).toString()
+    const healthUrl = new URL(healthPath, `http://127.0.0.1:${port}/`).toString()
     let lastStatus = "no response"
     for (let attempt = 1; attempt <= 30; attempt += 1) {
       try {
-        const response = await fetch(healthUrl, {
-          headers: previewToken ? { Authorization: `Bearer ${previewToken}` } : undefined,
-          signal: AbortSignal.timeout(5_000),
+        const result = await sandbox.commands.run("curl", {
+          args: ["-fsS", "-o", "/dev/null", "-w", "%{http_code}", healthUrl],
+          timeoutMs: 5_000,
         })
-        lastStatus = `HTTP ${response.status}`
-        if (response.ok) {
+        const status = Number.parseInt(result.stdout.trim(), 10)
+        lastStatus = Number.isFinite(status) ? `HTTP ${status}` : `curl exit ${result.exitCode}`
+        if (result.exitCode === 0 && status >= 200 && status < 400) {
           await this.appendLog(runId, "preview", "system", `Health check passed (${lastStatus})`)
           return
         }
