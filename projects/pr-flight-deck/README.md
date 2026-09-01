@@ -127,6 +127,8 @@ build, start command, health check, and preserved server-side variables.
 - The public deployment only runs one configured PR, one run at a time, with a
   configurable cooldown.
 - The Solari API key stays server-side and is never passed into the sandbox.
+- Solari preview capability tokens stay in server-side request headers and are
+  never written into report URLs or run logs.
 - The guest clock is synchronized before checkout so HTTPS verification stays
   enabled even when a restored sandbox snapshot has stale time.
 - Artifacts use generated run IDs and allow-listed filenames.

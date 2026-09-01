@@ -142,12 +142,20 @@ export class SolariFlightEngine {
         args: ["-lc", config.startCommand],
         cwd: projectRoot,
       })
+      void serverProcess.wait().catch((error) =>
+        this.appendLogBestEffort(
+          runId,
+          "cleanup",
+          "stderr",
+          `Preview process channel closed during cleanup: ${describeError(error)}`,
+        ),
+      )
       serverProcess.onData(({ stream, data }) => {
         void this.appendLog(runId, "preview", stream, data)
       })
 
       const preview = await sandbox.previewUrl(config.port)
-      await this.waitForPreview(runId, preview.url, config.healthPath)
+      await this.waitForPreview(runId, preview.url, config.healthPath, preview.token)
       await this.mutate(runId, (report) => {
         report.previewUrl = preview.url
         updateStage(report, "preview", "passed", `Preview healthy on port ${config.port}`)
@@ -159,6 +167,7 @@ export class SolariFlightEngine {
         runId,
         browsers,
         preview.url,
+        preview.token,
         config,
         "desktop",
         "Desktop Chrome",
@@ -180,6 +189,7 @@ export class SolariFlightEngine {
         runId,
         browsers,
         preview.url,
+        preview.token,
         config,
         "mobile",
         "Mobile Chrome",
@@ -369,6 +379,7 @@ export class SolariFlightEngine {
     runId: string,
     client: Solari,
     previewUrl: string,
+    previewToken: string | undefined,
     config: FlightDeckProjectConfig,
     id: BrowserSuiteReport["id"],
     label: string,
@@ -388,7 +399,12 @@ export class SolariFlightEngine {
     try {
       browser = await client.launch({ recording: true, retries: 2, probe: true })
       sessionId = browser.id
-      const context = await browser.newContext({ viewport })
+      const context = await browser.newContext({
+        viewport,
+        extraHTTPHeaders: previewToken
+          ? { Authorization: `Bearer ${previewToken}` }
+          : undefined,
+      })
       page = await context.newPage()
       page.on("console", (message) => {
         if (message.type() === "error") consoleErrors.push(message.text().slice(0, 500))
@@ -581,12 +597,20 @@ export class SolariFlightEngine {
     return result
   }
 
-  private async waitForPreview(runId: string, previewUrl: string, healthPath: string): Promise<void> {
+  private async waitForPreview(
+    runId: string,
+    previewUrl: string,
+    healthPath: string,
+    previewToken?: string,
+  ): Promise<void> {
     const healthUrl = new URL(healthPath, ensureTrailingSlash(previewUrl)).toString()
     let lastStatus = "no response"
     for (let attempt = 1; attempt <= 30; attempt += 1) {
       try {
-        const response = await fetch(healthUrl, { signal: AbortSignal.timeout(5_000) })
+        const response = await fetch(healthUrl, {
+          headers: previewToken ? { Authorization: `Bearer ${previewToken}` } : undefined,
+          signal: AbortSignal.timeout(5_000),
+        })
         lastStatus = `HTTP ${response.status}`
         if (response.ok) {
           await this.appendLog(runId, "preview", "system", `Health check passed (${lastStatus})`)
