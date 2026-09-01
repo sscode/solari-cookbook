@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-labelledby="title desc">
+  <title id="title">Orbital Supply mobile checkout failure</title>
+  <desc id="desc">Mobile storefront with a manifest that remains at zero items after a product is selected.</desc>
+  <rect width="390" height="844" fill="#10110f"/>
+  <rect width="390" height="72" fill="#10110f" stroke="#3c3d39"/>
+  <circle cx="28" cy="36" r="11" fill="none" stroke="#e9ff65"/>
+  <ellipse cx="28" cy="36" rx="16" ry="5" fill="none" stroke="#e9ff65" transform="rotate(-28 28 36)"/>
+  <text x="50" y="40" fill="#f2f1e9" font-family="Arial" font-size="11" font-weight="700" letter-spacing="1">ORBITAL SUPPLY</text>
+  <text x="280" y="40" fill="#e9ff65" font-family="monospace" font-size="9" font-weight="700">0 ITEMS</text>
+  <text x="24" y="126" fill="#e9ff65" font-family="monospace" font-size="9" font-weight="700" letter-spacing="1">ISSUE 04 · NIGHT OPERATIONS</text>
+  <text x="24" y="205" fill="#f2f1e9" font-family="Georgia" font-size="54" letter-spacing="-3">Find your way</text>
+  <text x="24" y="258" fill="#f2f1e9" font-family="Georgia" font-size="54" letter-spacing="-3">through the</text>
+  <text x="24" y="311" fill="#e9ff65" font-family="Georgia" font-size="54" font-style="italic" letter-spacing="-3">dark.</text>
+  <text x="24" y="359" fill="#b9bbb2" font-family="Arial" font-size="13">Rugged tools for crews beyond the</text>
+  <text x="24" y="380" fill="#b9bbb2" font-family="Arial" font-size="13">last streetlight.</text>
+  <rect x="0" y="428" width="390" height="416" fill="#e9ff65"/>
+  <circle cx="195" cy="632" r="166" fill="none" stroke="#a2b33b"/>
+  <circle cx="195" cy="632" r="119" fill="none" stroke="#a2b33b"/>
+  <rect x="158" y="548" width="74" height="125" rx="20" fill="#171915"/>
+  <rect x="167" y="555" width="56" height="64" rx="18" fill="#f8ffd1" stroke="#171915" stroke-width="9"/>
+  <rect x="148" y="670" width="94" height="19" rx="5" fill="#171915"/>
+  <text x="24" y="807" fill="#10110f" font-family="monospace" font-size="31" font-weight="700">NL-04</text>
+  <rect x="22" y="443" width="346" height="38" rx="3" fill="#381f1d" stroke="#ff776c"/>
+  <text x="36" y="467" fill="#ff9288" font-family="monospace" font-size="10" font-weight="700">EXPECTED 1 ITEM · MANIFEST FOUND 0</text>
+</svg>

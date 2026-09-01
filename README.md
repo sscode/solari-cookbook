@@ -7,6 +7,18 @@ Every example in this repo is a complete program you can run in under a minute.
 They are deliberately small: one idea each, no framework, no scaffolding to read
 past. Copy one into your project and change the parts you care about.
 
+## Projects built with Solari
+
+### [PR Flight Deck](projects/pr-flight-deck)
+
+Turn a public pull request into recorded release evidence. PR Flight Deck builds
+untrusted code in an isolated Solari sandbox, exposes its preview, runs the
+critical journey in recorded desktop and mobile browsers, and returns a release
+verdict with screenshots, replay links, logs, and a retained failure snapshot.
+
+It is deliberately larger than the single-concept examples below: a complete,
+deployable use case showing how Solari browsers and sandboxes compose.
+
 ## Examples
 
 ### Cloud browser

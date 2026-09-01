@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "projectPath": "projects/pr-flight-deck/fixtures/demo-shop",
+  "startCommand": "python3 -m http.server 4173 --bind 0.0.0.0",
+  "port": 4173,
+  "healthPath": "/",
+  "journeys": [
+    {
+      "id": "secure-navigation-light",
+      "name": "Secure a navigation light",
+      "steps": [
+        { "action": "goto", "path": "/" },
+        { "action": "expectText", "text": "Orbital Supply", "exact": true },
+        {
+          "action": "click",
+          "role": "button",
+          "name": "Add navigation light",
+          "exact": true
+        },
+        { "action": "expectText", "text": "1 item secured", "exact": true }
+      ]
+    }
+  ]
+}

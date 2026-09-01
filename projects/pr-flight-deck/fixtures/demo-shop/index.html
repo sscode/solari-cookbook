@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#e9ff65" />
+    <title>Orbital Supply — Field goods for deep space</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="wordmark" href="#top" aria-label="Orbital Supply home">
+        <span class="orbit-mark" aria-hidden="true"><i></i></span>
+        <span>Orbital Supply</span>
+      </a>
+      <p>Field goods / deep space</p>
+      <div class="cart" aria-live="polite">
+        <span>Manifest</span>
+        <strong id="cart-status">0 items secured</strong>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-heading">
+        <div class="hero-copy">
+          <p class="eyebrow">Issue 04 · Night operations</p>
+          <h1 id="hero-heading">Find your way<br />through the <em>dark.</em></h1>
+          <p class="lede">
+            Rugged, repairable tools for crews who work beyond the last streetlight.
+            Rated for dust, vacuum, and very long nights.
+          </p>
+          <a href="#field-kit">Inspect the field kit <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="hero-object" aria-hidden="true">
+          <div class="signal signal-one"></div>
+          <div class="signal signal-two"></div>
+          <div class="lamp">
+            <span class="lamp-cap"></span>
+            <span class="lamp-lens"></span>
+            <span class="lamp-body"></span>
+            <span class="lamp-foot"></span>
+          </div>
+          <p>NL-04<br /><small>Navigation light</small></p>
+        </div>
+      </section>
+
+      <section class="field-kit" id="field-kit" aria-labelledby="kit-heading">
+        <div class="section-number" aria-hidden="true">01</div>
+        <div class="product-copy">
+          <p class="eyebrow">Navigation / portable</p>
+          <h2 id="kit-heading">The light you leave on.</h2>
+          <p>
+            A warm, directional beacon with a 96-hour reserve. Magnetic feet hold to
+            hulls, rovers, and the workshop shelf back home.
+          </p>
+          <ul aria-label="Product specifications">
+            <li><span>Output</span><strong>800 lm</strong></li>
+            <li><span>Reserve</span><strong>96 hr</strong></li>
+            <li><span>Rating</span><strong>IP69</strong></li>
+          </ul>
+        </div>
+        <div class="product-action">
+          <span class="price">$148 <small>USD</small></span>
+          <button id="add-light" type="button">Add navigation light</button>
+          <p>Ships from Lunar Gateway 2</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Orbital Supply Co.</span>
+      <span>Built for the difficult distance.</span>
+    </footer>
+    <script src="./app.js"></script>
+  </body>
+</html>
