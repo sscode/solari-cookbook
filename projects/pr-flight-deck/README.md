@@ -115,8 +115,8 @@ railway up
 ```
 
 Set `SOLARI_API_KEY`, `PUBLIC_DEMO`, `DEMO_REPOSITORY`, `DEMO_PULL_NUMBER`, and
-`FLIGHT_DECK_REPOSITORY_URL` in Railway. `railway.json` configures the build,
-start command, health check, and bounded restart policy.
+`FLIGHT_DECK_REPOSITORY_URL` in Railway. `.railway/railway.ts` configures the
+build, start command, health check, and preserved server-side variables.
 
 ## Security and operating limits
 
@@ -127,6 +127,8 @@ start command, health check, and bounded restart policy.
 - The public deployment only runs one configured PR, one run at a time, with a
   configurable cooldown.
 - The Solari API key stays server-side and is never passed into the sandbox.
+- The guest clock is synchronized before checkout so HTTPS verification stays
+  enabled even when a restored sandbox snapshot has stale time.
 - Artifacts use generated run IDs and allow-listed filenames.
 
 This is a competition project in the Solari Cookbook, not an official Solari

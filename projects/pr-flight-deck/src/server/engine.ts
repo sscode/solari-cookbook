@@ -89,6 +89,17 @@ export class SolariFlightEngine {
         metadata: { product: "pr-flight-deck", runId },
       })
       await sandbox.connect()
+      await this.runCommand(runId, sandbox, "allocate", "date", [
+        "-u",
+        "-s",
+        new Date().toISOString(),
+      ])
+      await this.appendLog(
+        runId,
+        "allocate",
+        "system",
+        "Sandbox clock synchronized before verified outbound TLS",
+      )
       await this.completeStage(
         runId,
         "allocate",
